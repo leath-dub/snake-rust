@@ -23,25 +23,36 @@ impl Game {
     }
 }
 
-struct Chode {
+pub struct Chode {
     pos: [i32; 2],
     vel: [i32; 2],
 }
 
-struct Snake {
-    body: LinkedList<Segment>,
+impl Chode {
+    pub fn new(pos: [i32; 2], vel: [i32; 2]) -> Self {
+        Chode {
+            pos: pos,
+            vel: vel
+        }
+    }
+}
+
+pub struct Snake {
+    body: LinkedList<Chode>,
     head: Chode
 }
 
 impl Snake {
-    fn new(pos: [i32; 2], vel: [i32; 2]) -> Snake {
+    pub fn new(pos: [i32; 2], vel: [i32; 2]) -> Snake {
         Snake {
-            Snake::body: LinkedList::new() as Chode,
-            Snake::head: Chode {
-                pos: [pos[0], pos[1]],
-                vel: [vel[0], vel[1]]
+            body: LinkedList::new(),
+            head: Chode {
+                pos: pos,
+                vel: vel
             }
         }
     }
-    fn append(&mut self, other: &mut LinkedLis
+    pub fn push_back(&mut self, other: Chode) {
+        self.push_back(other);
+    }
 }
