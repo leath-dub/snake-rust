@@ -64,8 +64,12 @@ impl Fruit {
     pub fn new() -> Fruit {
         Fruit {pos: Self::rand_pos()}
     }
-    pub fn update(&mut self) {
-        self.pos = Self::rand_pos();
+    pub fn update(&mut self, snake: &Snake) {
+        let mut randpos = Self::rand_pos();
+        while Snake::collides(&randpos, &snake.head.pos) {
+            randpos = Self::rand_pos();
+        }
+        self.pos = randpos;
     }
     fn rand_pos() -> [i32; 2] {
         [
@@ -119,21 +123,19 @@ impl Snake {
         };
         /* move the head */
         self.head.pos = Self::move_chode(
-            &self.head, match vel2dir(&self.head.vel) {
-                Some(direction) => direction,
-                None => Cardinal::North // TODO: propagate an error
-            }, SIZE as i32);
+            &self.head, vel2dir(&self.head.vel).unwrap(), SIZE as i32);
         /* move the children( the body ) */
         Self::update_neighbours(self.body.iter_mut(), &vel);
     }
     pub fn nom(&mut self, fruit: &mut Fruit) {
         if Self::collides(&fruit.pos, &self.head.pos) {
-            fruit.update();
+            fruit.update(&self);
             self.push_back(Chode::new(match self.body.back() {
-                Some(tail) => Self::move_chode(tail, match vel2dir(&[-tail.vel[0], -tail.vel[1]]) {
-                        Some(direction) => direction,
-                        None => Cardinal::North
-                    }, SIZE as i32),
+                Some(tail) => Self::move_chode(
+                    tail,
+                    vel2dir(&[-tail.vel[0], -tail.vel[1]]).unwrap(),
+                    SIZE as i32
+                ),
                 None => [-1, 0]
             }, self.body.back().unwrap().vel));
         }
@@ -154,10 +156,7 @@ impl Snake {
             Some(chode) => {
                 Self::update_neighbours(iter, &chode.vel);
                 chode.pos = Self::move_chode(
-                    &chode, match vel2dir(&chode.vel) {
-                        Some(x) => x,
-                        None => Cardinal::North // TODO: propagate an error
-                    }, SIZE as i32
+                    &chode, vel2dir(&chode.vel).unwrap(), SIZE as i32
                 );
                 chode.vel = [vel[0], vel[1]]; // update velocity to parents
             },
