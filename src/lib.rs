@@ -215,5 +215,5 @@ pub fn draw_fruit(fruit: &Fruit, game: &mut sdl2::render::Canvas<sdl2::video::Wi
 }
 
 fn draw_rect(rect: sdl2::rect::Rect,game: &mut sdl2::render::Canvas<sdl2::video::Window>) {
-    game.fill_rect(rect);
+    game.fill_rect(rect).ok();
 }

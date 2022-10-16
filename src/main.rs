@@ -1,5 +1,4 @@
 use snake_game::*;
-use std::io;
 
 use std::time::Duration;
 /* sdl2 stuff */
@@ -24,7 +23,6 @@ pub fn main() {
     snake.make_body(4);
 
     /* (141, 161, 1) */
-    let mut is_event = 0;
     let mut ev_pmp = game.context.event_pump().unwrap();
     'running: loop {
         if snake.end() {
