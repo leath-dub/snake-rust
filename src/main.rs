@@ -1,3 +1,6 @@
+extern crate sdl2;
+extern crate rand;
+
 use snake_game::*;
 
 use std::time::Duration;
@@ -19,7 +22,7 @@ pub fn main() {
     /* fruit part */
     let mut fruit: Fruit = Fruit::new();
 
-    let mut snake: Snake = Snake::new([SIZE as i32, SIZE as i32], [1, 0]);
+    let mut snake: Snake = Snake::new(rand_pos(), [1, 0]);
     snake.make_body(4);
 
     /* (141, 161, 1) */

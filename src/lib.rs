@@ -62,21 +62,22 @@ pub struct Fruit {
 
 impl Fruit {
     pub fn new() -> Fruit {
-        Fruit {pos: Self::rand_pos()}
+        Fruit {pos: rand_pos()}
     }
     pub fn update(&mut self, snake: &Snake) {
-        let mut randpos = Self::rand_pos();
+        let mut randpos = rand_pos();
         while Snake::collides(&randpos, &snake.head.pos) {
-            randpos = Self::rand_pos();
+            randpos = rand_pos();
         }
         self.pos = randpos;
     }
-    fn rand_pos() -> [i32; 2] {
-        [
-            ((rand::random::<u32>() % (GAME_WIDTH - SIZE) / SIZE) * SIZE) as i32,
-            ((rand::random::<u32>() % (GAME_HEIGHT - SIZE) / SIZE) * SIZE) as i32
-        ]
-    }
+}
+
+pub fn rand_pos() -> [i32; 2] {
+    [
+        ((rand::random::<u32>() % (GAME_WIDTH - SIZE) / SIZE) * SIZE) as i32,
+        ((rand::random::<u32>() % (GAME_HEIGHT - SIZE) / SIZE) * SIZE) as i32
+    ]
 }
 
 impl Snake {
