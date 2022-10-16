@@ -165,17 +165,27 @@ impl Snake {
         };
     }
     fn move_chode(chode: &Chode, direction: Cardinal, dist: i32) -> [i32; 2] {
+        let add1 = chode.pos[1] + dist;
+        let sub1 = chode.pos[1] - dist;
+        let add2 = chode.pos[0] + dist;
+        let sub2 = chode.pos[0] - dist;
         match direction {
-            /* TODO modulus of negative not working */
-            Cardinal::North => [chode.pos[0], (chode.pos[1] - dist) % GAME_WIDTH as i32],
-            Cardinal::South => [chode.pos[0], (chode.pos[1] + dist) % GAME_WIDTH as i32],
-            Cardinal::East => [(chode.pos[0] + dist) % GAME_WIDTH as i32, chode.pos[1]],
-            Cardinal::West => [(chode.pos[0] - dist) % GAME_WIDTH as i32, chode.pos[1]]
+            Cardinal::North => [chode.pos[0], wrap(sub1, GAME_WIDTH as i32)],
+            Cardinal::South => [chode.pos[0], wrap(add1, GAME_WIDTH as i32)],
+            Cardinal::East => [wrap(add2, GAME_HEIGHT as i32), chode.pos[1]],
+            Cardinal::West => [wrap(sub2, GAME_HEIGHT as i32), chode.pos[1]]
         }
     }
     fn push_back(&mut self, other: Chode) {
         self.body.push_back(other);
     }
+}
+
+fn wrap(n: i32, max: i32) -> i32 {
+    if n < 0 {
+        return max;
+    }
+    n % max
 }
 
 pub fn vel2dir(&vel: &[i32; 2]) -> Option<Cardinal> {
