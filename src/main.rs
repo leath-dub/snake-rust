@@ -9,7 +9,6 @@ use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
 
-
 pub fn main() {
     let game = Game::init_sdl();
 
@@ -39,26 +38,22 @@ pub fn main() {
                  Event::KeyDown {keycode: Some(Keycode::H), ..} |
                  Event::KeyDown {keycode: Some(Keycode::Left), ..} => {
                      snake.change_velocity([-1, 0]);
-                     continue;
                  },
                  Event::KeyDown {keycode: Some(Keycode::J), ..} |
                  Event::KeyDown {keycode: Some(Keycode::Down), ..} => {
                      snake.change_velocity([0, 1]);
-                     continue;
                  },
                  Event::KeyDown {keycode: Some(Keycode::K), ..} |
                  Event::KeyDown {keycode: Some(Keycode::Up), ..} => {
                      snake.change_velocity([0, -1]);
-                     continue;
                  },
                  Event::KeyDown {keycode: Some(Keycode::L), ..} |
                  Event::KeyDown {keycode: Some(Keycode::Right), ..} => {
                      snake.change_velocity([1, 0]);
-                     continue;
                  },
                  Event::Quit {..} |
                  Event::KeyDown { keycode: Some(Keycode::Escape), ..} => {
-                        break 'running
+                     break 'running
                  },
                  _ => ()
              }
