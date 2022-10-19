@@ -3,11 +3,12 @@ extern crate rand;
 
 use snake_game::*;
 
-use std::time::Duration;
 /* sdl2 stuff */
 use sdl2::pixels::Color;
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
+
+use sdl2::gfx::framerate::FPSManager;
 
 pub fn main() {
     let game = Game::init_sdl();
@@ -24,7 +25,10 @@ pub fn main() {
     let mut snake: Snake = Snake::new(rand_pos(), [1, 0]);
     snake.make_body(4);
 
-    /* (141, 161, 1) */
+    let mut fps = FPSManager::new();
+    fps.set_framerate(10).ok();
+    let mut count = 0;
+
     let mut ev_pmp = game.context.event_pump().unwrap();
     'running: loop {
         if snake.end() {
@@ -63,6 +67,6 @@ pub fn main() {
         cvs.set_draw_color(Color::RGB(141, 161, 1));
         draw_snake(&snake, &mut cvs);
         cvs.present();
-        std::thread::sleep(Duration::from_millis(150));
+        fps.delay();
     }
 }

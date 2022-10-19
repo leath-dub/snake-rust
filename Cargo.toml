@@ -6,9 +6,9 @@ edition = "2021"
 [profile.dev]
 opt-level = 1
 
-# [profile.dev.package."*"]
-# opt-level = 3
+[profile.dev.package."*"]
+opt-level = 3
 
 [dependencies]
-sdl2 = { version = "0.35.2", features = [] }
+sdl2 = { version = "0.35.2", features = ["gfx"] }
 rand = "0.8.5"
