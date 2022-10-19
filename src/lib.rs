@@ -182,10 +182,7 @@ impl Snake {
 }
 
 fn wrap(n: i32, max: i32) -> i32 {
-    if n < 0 {
-        return max - (-n % max);
-    }
-    n % max
+    ((n % max) + max) % max
 }
 
 pub fn vel2dir(&vel: &[i32; 2]) -> Option<Cardinal> {
