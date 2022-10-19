@@ -27,7 +27,6 @@ pub fn main() {
 
     let mut fps = FPSManager::new();
     fps.set_framerate(10).ok();
-    let mut count = 0;
 
     let mut ev_pmp = game.context.event_pump().unwrap();
     'running: loop {
