@@ -183,7 +183,7 @@ impl Snake {
 
 fn wrap(n: i32, max: i32) -> i32 {
     if n < 0 {
-        return max;
+        return max - (-n % max);
     }
     n % max
 }
