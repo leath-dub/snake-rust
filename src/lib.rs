@@ -8,7 +8,7 @@ pub struct SdlWrapper {
 
 pub struct Game;
 pub const NAME: &str = "Snake";
-pub const SIZE: u32 = 40;
+pub const SIZE: u32 = 30;
 pub const GAME_WIDTH: u32 = 600;
 pub const GAME_HEIGHT: u32 = 600;
 
@@ -66,7 +66,7 @@ impl Fruit {
     }
     pub fn update(&mut self, snake: &Snake) {
         let mut randpos = rand_pos();
-        while Snake::collides(&randpos, &snake.head.pos) {
+        while snake.collides_snake(&randpos) {
             randpos = rand_pos();
         }
         self.pos = randpos;
@@ -82,13 +82,9 @@ pub fn rand_pos() -> [i32; 2] {
 
 impl Snake {
     pub fn make_body(&mut self, len: u32) -> Option<()> {
-        let direction: Cardinal = match vel2dir(
+        let direction: Cardinal = vel2dir(
             /* reverse of heads velocity */
-            &[-self.head.vel[0], -self.head.vel[1]]
-        ) {
-            None => return None,
-            Some(direction) => direction
-        };
+            &[-self.head.vel[0], -self.head.vel[1]]).unwrap();
 
         for n in 1..(len + 1) {
             self.push_back(Chode::new(
@@ -143,6 +139,17 @@ impl Snake {
     }
     fn collides(a: &[i32; 2], b: &[i32; 2]) -> bool {
         a[0] == b[0] && a[1] == b[1]
+    }
+    fn collides_snake(&self, pos: &[i32; 2]) -> bool {
+        if Self::collides(&self.head.pos, &pos) {
+            return true;
+        }
+        for chode in self.body.iter() {
+            if Self::collides(&chode.pos, &pos) {
+                return true;
+            }
+        }
+        false
     }
     pub fn end(&self) -> bool {
         for chode in self.body.iter() {
