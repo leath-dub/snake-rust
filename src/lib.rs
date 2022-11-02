@@ -1,5 +1,8 @@
 use std::collections::LinkedList;
 use std::collections::linked_list::IterMut;
+use sdl2::rect::Rect;
+use sdl2::render::Canvas;
+use sdl2::video::Window;
 
 pub struct SdlWrapper {
     pub context: sdl2::Sdl,
@@ -208,27 +211,34 @@ pub fn vel2dir(&vel: &[i32; 2]) -> Option<Cardinal> {
     }
 }
 
-pub fn draw_snake(snake: &Snake, game: &mut sdl2::render::Canvas<sdl2::video::Window>) {
+pub fn draw_snake(snake: &Snake, game: &mut Canvas<Window>) {
     game.set_draw_color(sdl2::pixels::Color::RGB(141, 161, 1));
     /* draw the head */
-    draw_rect(sdl2::rect::Rect::new(
+    draw_rect(Rect::new(
         snake.head.pos[0], snake.head.pos[1], SIZE, SIZE
     ), game);
+    /* TODO: add buffer for rectangles to uses cvs.draw_rects() instead */
     /* draw the body */
+    let mut rects: [Rect; ((GAME_WIDTH * GAME_HEIGHT) / SIZE) as usize] = [Rect::new(0, 0, 0, 0); ((GAME_WIDTH * GAME_HEIGHT) / SIZE) as usize];
+    let mut i = 0;
     for chode in snake.body.iter() {
-        draw_rect(sdl2::rect::Rect::new(
-            chode.pos[0], chode.pos[1], SIZE, SIZE
-        ), game);
+        rects[i] = Rect::new(chode.pos[0], chode.pos[1], SIZE, SIZE);
+        i += 1;
     }
+
+    game.fill_rects(&rects).ok();
+    //draw_rect(Rect::new(
+    //    chode.pos[0], chode.pos[1], SIZE, SIZE
+    // ), game);
 }
 
-pub fn draw_fruit(fruit: &Fruit, game: &mut sdl2::render::Canvas<sdl2::video::Window>) {
+pub fn draw_fruit(fruit: &Fruit, game: &mut Canvas<Window>) {
     game.set_draw_color(sdl2::pixels::Color::RGB(230, 126, 128));
-    draw_rect(sdl2::rect::Rect::new(
+    draw_rect(Rect::new(
         fruit.pos[0], fruit.pos[1], SIZE, SIZE
     ), game);
 }
 
-fn draw_rect(rect: sdl2::rect::Rect,game: &mut sdl2::render::Canvas<sdl2::video::Window>) {
+fn draw_rect(rect: Rect,game: &mut Canvas<Window>) {
     game.fill_rect(rect).ok();
 }
